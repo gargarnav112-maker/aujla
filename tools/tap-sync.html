@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tap Sync — Straight Up</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg:#111214; --fg:#f2f2f7; --mut:#8e8e93; --acc:#C7313B; --blue:#0A84FF; --row:#1c1c1e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 -apple-system, Inter, system-ui, sans-serif; }
+  header { padding:16px 20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; border-bottom:1px solid #2c2c2e; }
+  h1 { font-size:16px; margin:0 12px 0 0; }
+  label.btn, button { background:var(--row); color:var(--fg); border:1px solid #3a3a3c; border-radius:10px; padding:7px 12px; cursor:pointer; font:inherit; }
+  button.on { background:var(--acc); border-color:var(--acc); }
+  input[type=file] { display:none; }
+  #wrap { position:relative; margin:16px 20px; }
+  canvas { width:100%; height:220px; display:block; background:#0b0b0c; border-radius:12px; cursor:crosshair; }
+  main { display:grid; grid-template-columns: 1fr 1fr; gap:16px; padding:0 20px 20px; }
+  .card { background:var(--row); border-radius:14px; padding:14px 16px; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric: tabular-nums; }
+  td, th { padding:4px 6px; text-align:left; border-bottom:1px solid #2c2c2e; }
+  th { color:var(--mut); font-weight:600; }
+  tr.cur td { color:var(--acc); }
+  kbd { background:#2c2c2e; border-radius:5px; padding:1px 6px; font-family: ui-monospace, monospace; }
+  #status { color:var(--mut); }
+  textarea { width:100%; height:260px; background:#0b0b0c; color:var(--fg); border:1px solid #2c2c2e; border-radius:10px; font:12px ui-monospace, monospace; padding:10px; }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tap Sync</h1>
+  <label class="btn">Audio…<input id="fAudio" type="file" accept="audio/*,video/*"></label>
+  <label class="btn">beats.json…<input id="fBeats" type="file" accept=".json"></label>
+  <label class="btn">lyrics-timing.json…<input id="fTiming" type="file" accept=".json"></label>
+  <label class="btn">lyrics.txt…<input id="fLyrics" type="file" accept=".txt"></label>
+  <button id="play">Play ▶</button>
+  <button id="slow">0.75×</button>
+  <button id="snapBtn" class="on">Snap ⅛ beat</button>
+  <button id="reset">Reset marks</button>
+  <button id="export">Export JSON</button>
+  <span id="status">Load the audio and src/data/beats.json to begin.</span>
+</header>
+<div id="wrap"><canvas id="cv" width="2400" height="440"></canvas></div>
+<main>
+  <section class="card">
+    <p><kbd>Space</kbd> mark next line start · <kbd>H</kbd> mark current line's hero word · <kbd>A</kbd> mark ad-lib ·
+       <kbd>←</kbd>/<kbd>→</kbd> nudge last mark ±1 frame (60 fps) · <kbd>P</kbd> play/pause · <kbd>Backspace</kbd> undo last mark ·
+       click the waveform to seek.</p>
+    <table id="tbl"><thead><tr><th>Line</th><th>Start</th><th>Hero</th><th>Text</th></tr></thead><tbody></tbody></table>
+    <table id="adl" style="margin-top:10px"><thead><tr><th>Ad-lib</th><th>After</th><th>Start</th></tr></thead><tbody></tbody></table>
+  </section>
+  <section class="card">
+    <p>Exported JSON (same schema as <code>src/data/lyrics-timing.json</code>). Save it over that file; the edit re-flows with no code changes.</p>
+    <textarea id="out" spellcheck="false"></textarea>
+  </section>
+</main>
+<script>
+(() => {
+  const FPS = 60;
+  const $ = (id) => document.getElementById(id);
+  const audio = new Audio();
+  let ctx, buf = null, peaks = null, beats = null;
+  let lyrics = [];               // [{text, adlib}]
+  let heroIdx = {};              // L2 → word index (from existing timing json)
+  let marks = [];                // {type:'line'|'hero'|'adlib', t}
+  let snapOn = true, slow = false;
+
+  // ---------- loading ----------
+  $('fAudio').onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    audio.src = URL.createObjectURL(f);
+    ctx = ctx || new AudioContext();
+    buf = await ctx.decodeAudioData(await f.arrayBuffer());
+    computePeaks(); draw(); status();
+  };
+  const readJson = (f) => f.text().then(JSON.parse);
+  $('fBeats').onchange = async (e) => { beats = await readJson(e.target.files[0]); draw(); status(); };
+  $('fTiming').onchange = async (e) => {
+    const j = await readJson(e.target.files[0]);
+    marks = [];
+    for (const l of j.lines) {
+      marks.push({type: 'line', t: l.start});
+      if (l.heroWordIndex != null) heroIdx[l.id] = l.heroWordIndex;
+      if (l.heroWordTime != null) marks.push({type: 'hero', t: l.heroWordTime});
+    }
+    for (const a of j.adlibs || []) marks.push({type: 'adlib', t: a.start});
+    marks.sort((a, b) => a.t - b.t);
+    refresh();
+  };
+  $('fLyrics').onchange = async (e) => {
+    const txt = await e.target.files[0].text();
+    lyrics = txt.split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(l => {
+      const m = l.match(/\(([^)]*)\)/);
+      return {text: l.replace(/\s*\([^)]*\)\s*/g, ' ').trim(), adlib: m ? m[1] : null};
+    });
+    refresh();
+  };
+
+  function computePeaks() {
+    const ch = buf.getChannelData(0), W = $('cv').width, step = Math.floor(ch.length / W);
+    peaks = new Float32Array(W);
+    for (let x = 0; x < W; x++) { let m = 0; for (let i = x * step; i < (x + 1) * step; i++) m = Math.max(m, Math.abs(ch[i])); peaks[x] = m; }
+  }
+
+  // ---------- time helpers ----------
+  const dur = () => buf ? buf.duration : (beats ? beats.duration : 17.21);
+  const snap = (t) => {
+    if (!snapOn || !beats) return t;
+    const d = beats.beatPeriod / 2;
+    return beats.beat0 + Math.round((t - beats.beat0) / d) * d;
+  };
+  const frameRound = (t) => Math.round(t * FPS) / FPS;
+  const now = () => audio.currentTime;
+
+  // ---------- drawing ----------
+  function draw() {
+    const cv = $('cv'), g = cv.getContext('2d'), W = cv.width, H = cv.height, D = dur();
+    g.clearRect(0, 0, W, H);
+    const X = (t) => (t / D) * W;
+    if (beats) {
+      for (const d of beats.dropouts || []) { g.fillStyle = 'rgba(255,255,255,0.08)'; g.fillRect(X(d.start), 0, X(d.end) - X(d.start), H); }
+      beats.beats.forEach((b, i) => {
+        const bar = (beats.barBeats || []).includes(i);
+        g.fillStyle = bar ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.15)';
+        g.fillRect(X(b), 0, bar ? 3 : 1.5, H);
+      });
+      g.fillStyle = '#C7313B';
+      for (const a of beats.accents808) { g.beginPath(); g.arc(X(a), H - 14, 7, 0, 7); g.fill(); }
+    }
+    if (peaks) {
+      g.fillStyle = '#5e6670';
+      for (let x = 0; x < W; x++) { const h = peaks[x] * H * 0.9; g.fillRect(x, H / 2 - h / 2, 1, h); }
+    }
+    g.font = 'bold 26px system-ui';
+    let li = 0;
+    for (const m of marks) {
+      const col = m.type === 'line' ? '#f2f2f7' : m.type === 'hero' ? '#0A84FF' : '#C7313B';
+      g.fillStyle = col; g.fillRect(X(m.t) - 1.5, 0, 3, H);
+      if (m.type === 'line') { li++; g.fillText('L' + li, X(m.t) + 6, 30); }
+      if (m.type === 'hero') g.fillText('H', X(m.t) + 6, 62);
+      if (m.type === 'adlib') g.fillText('A', X(m.t) + 6, 94);
+    }
+    g.fillStyle = '#ff9f0a'; g.fillRect(X(now()) - 2, 0, 4, H);
+  }
+  (function loop() { draw(); requestAnimationFrame(loop); })();
+  $('cv').onclick = (e) => {
+    const r = e.target.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - r.left) / r.width) * dur();
+  };
+
+  // ---------- marking ----------
+  function addMark(type) {
+    const t = frameRound(snap(now()));
+    marks.push({type, t});
+    marks.sort((a, b) => a.t - b.t);
+    marks.last = marks.find(m => m.t === t && m.type === type);
+    refresh();
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'TEXTAREA') return;
+    if (e.code === 'Space') { e.preventDefault(); addMark('line'); }
+    else if (e.key === 'h' || e.key === 'H') addMark('hero');
+    else if (e.key === 'a' || e.key === 'A') addMark('adlib');
+    else if (e.key === 'p' || e.key === 'P') toggle();
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const m = marks.last || marks[marks.length - 1]; if (!m) return;
+      m.t = frameRound(m.t + (e.key === 'ArrowLeft' ? -1 : 1) / FPS);
+      marks.sort((a, b) => a.t - b.t); refresh();
+    } else if (e.key === 'Backspace') {
+      const m = marks.last || marks[marks.length - 1]; if (!m) return;
+      marks.splice(marks.indexOf(m), 1); marks.last = null; refresh();
+    }
+  });
+  const toggle = () => { if (audio.paused) { audio.play(); $('play').textContent = 'Pause ❚❚'; } else { audio.pause(); $('play').textContent = 'Play ▶'; } };
+  $('play').onclick = toggle;
+  $('slow').onclick = () => { slow = !slow; audio.playbackRate = slow ? 0.75 : 1; audio.preservesPitch = true; $('slow').classList.toggle('on', slow); };
+  $('snapBtn').onclick = () => { snapOn = !snapOn; $('snapBtn').classList.toggle('on', snapOn); };
+  $('reset').onclick = () => { marks = []; refresh(); };
+  $('export').onclick = () => {
+    const blob = new Blob([$('out').value], {type: 'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'lyrics-timing.json'; a.click();
+  };
+
+  // ---------- schema ----------
+  function build() {
+    const lines = marks.filter(m => m.type === 'line').map(m => m.t);
+    const heroes = marks.filter(m => m.type === 'hero').map(m => m.t);
+    const adl = marks.filter(m => m.type === 'adlib').map(m => m.t);
+    const finalEnd = beats && beats.slams && beats.slams[1] ? beats.slams[1] : dur();
+    const r6 = (x) => Math.round(x * 1e6) / 1e6;
+    const out = {hypothesis: 'tap-sync', lines: [], adlibs: []};
+    lines.forEach((s, i) => {
+      const id = 'L' + (i + 1), e = i + 1 < lines.length ? lines[i + 1] : finalEnd;
+      const h = heroes.find(t => t >= s && t < e);
+      out.lines.push({id, start: r6(s), end: r6(e), heroWordIndex: heroIdx[id] ?? null, heroWordTime: h != null ? r6(h) : null});
+    });
+    // ad-lib n belongs to the n-th lyric line that has a bracketed ad-lib (default L2, L6)
+    const adlibLines = lyrics.length ? lyrics.map((l, i) => l.adlib ? i + 1 : 0).filter(Boolean) : [2, 6];
+    adl.forEach((s, i) => {
+      const after = out.lines.filter(l => l.start <= s).pop();
+      const next = out.lines.find(l => l.start > s);
+      out.adlibs.push({id: 'A' + (i + 1), afterLine: after ? after.id : 'L' + (adlibLines[i] || 1), start: r6(s), end: r6(next ? next.start : finalEnd)});
+    });
+    return out;
+  }
+  function refresh() {
+    const j = build();
+    $('out').value = JSON.stringify(j, null, 2);
+    const tb = $('tbl').tBodies[0]; tb.innerHTML = '';
+    j.lines.forEach((l, i) => {
+      const tr = tb.insertRow();
+      tr.innerHTML = `<td>${l.id}</td><td>${l.start.toFixed(3)} <span style="color:#8e8e93">f${Math.round(l.start * FPS)}</span></td><td>${l.heroWordTime != null ? l.heroWordTime.toFixed(3) : '—'}</td><td>${lyrics[i] ? lyrics[i].text : ''}</td>`;
+    });
+    const ab = $('adl').tBodies[0]; ab.innerHTML = '';
+    j.adlibs.forEach(a => { const tr = ab.insertRow(); tr.innerHTML = `<td>${a.id}</td><td>${a.afterLine}</td><td>${a.start.toFixed(3)}</td>`; });
+    status();
+  }
+  function status() {
+    const n = marks.filter(m => m.type === 'line').length;
+    $('status').textContent = `${buf ? 'audio ✓' : 'no audio'} · ${beats ? 'beats ✓ ' + beats.bpm + ' BPM' : 'no beats.json'} · ${n}/8 lines marked`;
+  }
+  refresh();
+})();
+</script>
+</body>
+</html>

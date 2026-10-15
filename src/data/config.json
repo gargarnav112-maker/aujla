@@ -1,0 +1,15 @@
+{
+  "handle": "yourhandle",
+  "plateText": "PB 10 AJ 0001",
+  "manakArtist": "Kuldeep Manak",
+  "nipseyArtist": "Nipsey Hussle",
+  "manakTrack": "",
+  "nipseyTrack": "",
+  "colorNameGurmukhi": "ਚਿੱਟਾ",
+  "coord": {
+    "lat": 30.694,
+    "lon": 76.103
+  },
+  "tailSeconds": 1.6,
+  "endCardSeconds": 1.19
+}

@@ -1,0 +1,75 @@
+{
+  "hypothesis": "H1",
+  "lines": [
+    {
+      "id": "L1",
+      "start": 2.834292,
+      "end": 4.573548,
+      "heroWordIndex": null,
+      "heroWordTime": null
+    },
+    {
+      "id": "L2",
+      "start": 4.573548,
+      "end": 6.312805,
+      "heroWordIndex": 3,
+      "heroWordTime": null
+    },
+    {
+      "id": "L3",
+      "start": 6.312805,
+      "end": 8.052061,
+      "heroWordIndex": null,
+      "heroWordTime": null
+    },
+    {
+      "id": "L4",
+      "start": 8.052061,
+      "end": 9.791318,
+      "heroWordIndex": 3,
+      "heroWordTime": null
+    },
+    {
+      "id": "L5",
+      "start": 9.791318,
+      "end": 11.530574,
+      "heroWordIndex": 0,
+      "heroWordTime": null
+    },
+    {
+      "id": "L6",
+      "start": 11.530574,
+      "end": 13.269831,
+      "heroWordIndex": 3,
+      "heroWordTime": null
+    },
+    {
+      "id": "L7",
+      "start": 13.269831,
+      "end": 15.009087,
+      "heroWordIndex": 2,
+      "heroWordTime": null
+    },
+    {
+      "id": "L8",
+      "start": 15.009087,
+      "end": 16.748344,
+      "heroWordIndex": 3,
+      "heroWordTime": null
+    }
+  ],
+  "adlibs": [
+    {
+      "id": "A1",
+      "afterLine": "L2",
+      "start": 5.87799,
+      "end": 6.312805
+    },
+    {
+      "id": "A2",
+      "afterLine": "L6",
+      "start": 12.835016,
+      "end": 13.269831
+    }
+  ]
+}
