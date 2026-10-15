@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# usage: tools/contact_sheet.sh OUT.png COLS THUMB_PX FPS frame-files...
+exec python3 "$(dirname "$0")/contact_sheet.py" "$@"

@@ -3,11 +3,11 @@ import {AbsoluteFill, useCurrentFrame} from 'remotion';
 import {grain} from '../motion';
 
 /** Animated film grain, seeded per frame (deterministic). */
-export const Grain: React.FC<{opacity?: number; id?: string}> = ({opacity = grain.opacity, id = 'grain'}) => {
+export const Grain: React.FC<{opacity?: number; id?: string; light?: boolean}> = ({opacity = grain.opacity, id = 'grain', light = false}) => {
 	const frame = Math.floor(useCurrentFrame());
 	const seed = (frame * 7919) % 9973;
 	return (
-		<AbsoluteFill style={{pointerEvents: 'none', mixBlendMode: 'overlay', opacity: opacity / 0.035 * 0.55}}>
+		<AbsoluteFill style={{pointerEvents: 'none', mixBlendMode: light ? 'multiply' : 'overlay', opacity: (opacity / 0.035) * (light ? 0.22 : 0.55)}}>
 			<svg width="100%" height="100%" viewBox="0 0 540 540" preserveAspectRatio="none">
 				<filter id={`${id}-f`} x="0" y="0" width="100%" height="100%">
 					<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed={seed} stitchTiles="stitch" />

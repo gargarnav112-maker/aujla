@@ -1,0 +1,103 @@
+
+measured visual onset per hit (diff at f-2..f+3):
+  f   66 base   1.23 [21.58, 34.08, 20.15, 8.55, 7.3, 4.46] early-2    S0→S1 boundary (808 enters)
+  f  122 base   1.13 [1.18, 1.14, 2.31, 3.12, 2.9, 3.37] ok         S1→S2 boundary (808 drops out)
+  f  170 base   2.07 [2.78, 0.16, 124.73, 3.55, 5.3, 6.39] ok         S2→S3 boundary (SLAM A)
+  f  379 base   1.84 [11.62, 14.54, 40.56, 21.44, 16.1, 12.78] early-2    S3→S4 boundary (L3)
+  f  587 base   2.61 [17.14, 18.04, 40.97, 9.76, 6.4, 4.26] early-2    S4→S5 boundary (L5)
+  f  796 base  18.53 [18.24, 18.69, 24.91, 12.52, 11.09, 8.46] no-change  S5→S6 boundary (L7)
+  f  901 base   0.04 [0.04, 0.1, 23.59, 40.86, 27.92, 31.94] ok         S6→S7 boundary (L8)
+  f 1005 base   0.00 [0.0, 0.0, 99.52, 14.41, 17.33, 17.4] ok         S7→S8 boundary (SLAM B)
+  f   14 base   4.24 [6.57, 6.33, 5.89, 4.03, 3.08, 1.81] no-change  S0 phone lands / island expands (beat 0)
+  f   40 base   0.28 [0.22, 0.3, 1.32, 0.31, 0.25, 0.33] ok         S0 headphones pill
+  f  118 base   2.15 [1.37, 0.85, 9.15, 1.09, 1.18, 1.14] ok         S1 pin lands
+  f  122 base   1.13 [1.18, 1.14, 2.31, 3.12, 2.9, 3.37] ok         S2 grey flip
+  f  170 base   2.07 [2.78, 0.16, 124.73, 3.55, 5.3, 6.39] ok         S3 SLAM A flash + punch
+  f  196 base   0.77 [0.64, 0.41, 1.01, 0.32, 0.14, 0.07] no-change  S3 settings row 1
+  f  209 base   0.64 [0.45, 0.4, 0.18, 0.17, 0.1, 0.03] no-change  S3 settings row 2
+  f  222 base   0.69 [0.53, 0.38, 0.95, 0.38, 0.27, 0.08] no-change  S3 settings row 3
+  f  235 base   0.70 [0.55, 0.28, 0.25, 0.17, 0.08, 0.06] no-change  S3 settings row 4
+  f  248 base   0.75 [0.45, 0.43, 1.17, 0.4, 0.55, 0.16] no-change  S3 settings row 5
+  f  261 base   0.91 [0.73, 0.43, 0.4, 0.3, 0.25, 0.05] no-change  S3 settings row 6
+  f  274 base   0.70 [0.58, 0.46, 1.34, 0.48, 0.31, 0.19] ok         S3 settings row 7
+  f  301 base   0.15 [0.12, 0.07, 4.25, 4.98, 4.36, 3.93] ok         S3 toggle flips ON (L2 hero)
+  f  353 base   0.02 [0.01, 0.04, 17.14, 4.59, 5.37, 1.58] ok         S3 ad-lib 1
+  f  483 base   1.84 [2.91, 2.35, 3.47, 1.93, 1.47, 0.86] ok         S4 widget drop (L4)
+  f  483 base   1.84 [2.91, 2.35, 3.47, 1.93, 1.47, 0.86] ok         S4 fill step 1
+  f  509 base   0.43 [0.41, 0.22, 6.22, 8.52, 4.74, 3.36] ok         S4 fill step 2
+  f  535 base   0.41 [0.32, 0.52, 2.05, 0.5, 0.33, 0.57] ok         S4 fill step 3
+  f  561 base   0.42 [0.36, 0.33, 1.91, 0.67, 0.3, 0.31] ok         S4 fill step 4
+  f  561 base   0.42 [0.36, 0.33, 1.91, 0.67, 0.3, 0.31] ok         S4 brim (L4 hero)
+  f  587 base   2.61 [17.14, 18.04, 40.97, 9.76, 6.4, 4.26] early-2    S5 char 1
+  f  594 base   3.95 [2.38, 1.56, 1.29, 1.77, 0.37, 0.68] no-change  S5 char 2
+  f  601 base   0.29 [0.21, 0.25, 1.28, 0.05, 0.08, 0.1] ok         S5 char 3
+  f  607 base   0.08 [0.07, 0.05, 1.39, 0.08, 0.09, 0.1] ok         S5 char 4
+  f  614 base   0.08 [0.08, 0.09, 1.31, 0.32, 0.2, 0.2] ok         S5 char 5
+  f  620 base   0.20 [0.25, 0.09, 0.31, 0.09, 0.06, 0.11] no-change  S5 char 6
+  f  627 base   0.05 [0.02, 0.02, 0.3, 0.06, 0.05, 0.06] no-change  S5 char 7
+  f  633 base   0.05 [0.07, 0.03, 0.18, 0.06, 0.06, 0.13] no-change  S5 char 8
+  f  640 base   0.05 [0.03, 0.04, 1.39, 0.31, 0.31, 0.22] ok         S5 char 9
+  f  646 base   0.26 [0.13, 0.11, 0.29, 0.08, 0.09, 0.07] no-change  S5 char 10
+  f  653 base   0.06 [0.05, 0.05, 0.3, 0.06, 0.09, 0.1] no-change  S5 char 11
+  f  659 base   0.07 [0.06, 0.06, 0.26, 0.07, 0.09, 0.09] no-change  S5 char 12
+  f  666 base   0.08 [0.08, 0.03, 1.45, 0.38, 0.56, 0.9] ok         S5 char 13
+  f  666 base   0.08 [0.08, 0.03, 1.45, 0.38, 0.56, 0.9] ok         S5 tap
+  f  692 base   1.50 [2.61, 3.95, 3.14, 4.67, 5.66, 5.59] early-2    S5 queue sheet (L6)
+  f  718 base   3.48 [2.47, 2.12, 2.14, 3.42, 2.2, 2.48] no-change  S5 Nipsey row locks (808)
+  f  770 base   0.04 [0.12, 0.05, 12.64, 4.7, 11.97, 8.21] ok         S5 ad-lib 2
+  f  796 base  18.53 [18.24, 18.69, 24.91, 12.52, 11.09, 8.46] no-change  S6 plate slam (L7)
+  f  816 base   7.59 [7.24, 6.82, 7.93, 7.65, 7.33, 7.33] no-change  S6 column 1 locks
+  f  822 base   7.33 [6.88, 6.51, 7.01, 6.28, 6.61, 6.8] no-change  S6 column 2 locks
+  f  829 base   6.46 [5.58, 5.43, 5.42, 5.08, 5.59, 6.01] no-change  S6 column 3 locks
+  f  835 base   5.38 [5.16, 5.34, 4.99, 4.26, 4.25, 4.89] no-change  S6 column 4 locks
+  f  842 base   4.61 [4.34, 4.31, 4.45, 3.93, 3.68, 3.77] no-change  S6 column 5 locks
+  f  848 base   3.82 [3.86, 3.61, 4.53, 3.76, 3.15, 2.83] no-change  S6 column 6 locks
+  f  855 base   2.85 [2.86, 2.99, 2.99, 2.57, 2.46, 2.15] no-change  S6 column 7 locks
+  f  861 base   2.31 [2.1, 2.07, 2.41, 1.75, 1.81, 1.98] no-change  S6 column 8 locks
+  f  868 base   1.68 [1.46, 1.47, 1.58, 1.07, 1.17, 1.09] no-change  S6 column 9 locks
+  f  874 base   1.08 [0.88, 0.75, 2.47, 3.22, 5.0, 5.61] ok         S6 column 10 locks
+  f  927 base   0.77 [0.69, 0.58, 4.8, 4.99, 5.3, 3.4] ok         S7 loupe lands (808)
+  f  933 base   4.10 [1.94, 1.07, 2.64, 2.77, 3.42, 0.8] no-change  S7 hex char 1
+  f  940 base   0.76 [0.49, 0.27, 0.23, 0.21, 0.08, 0.06] no-change  S7 hex char 2
+  f  946 base   0.09 [0.09, 0.13, 0.14, 0.03, 0.03, 0.05] no-change  S7 hex char 3
+  f  953 base   0.03 [0.02, 0.03, 1.7, 0.51, 0.5, 0.36] ok         S7 hex char 4
+  f  959 base   0.43 [2.74, 0.22, 0.16, 0.71, 1.3, 2.19] early-2    S7 hex char 5
+  f  966 base   1.00 [3.78, 5.39, 7.45, 10.08, 12.64, 11.71] early-2    S7 hex char 6
+  f  957 base   0.04 [0.5, 0.36, 2.74, 0.22, 0.16, 0.71] early-2    S7 flood starts (808 vanishes)
+  f  979 base   7.68 [0.0, 0.0, 0.0, 0.0, 0.0, 0.0] no-change  S7 white full
+  f 1005 base   0.00 [0.0, 0.0, 99.52, 14.41, 17.33, 17.4] ok         S8 SLAM B → pin + ring
+  f 1057 base   0.95 [0.93, 0.84, 1.91, 1.94, 5.33, 8.35] ok         S8 pull back
+  f 1109 base   1.94 [41.65, 66.72, 11.02, 2.22, 1.52, 0.99] early-2    S8 card away / handle bloom
+
+68 hits × 2 frame rates checked; 30 warnings; 0 failures
+  warn: [video 60fps] no-change: S5→S6 boundary (L7) (frame 796)
+  warn: [video 60fps] no-change: S0 phone lands / island expands (beat 0) (frame 14)
+  warn: [video 60fps] no-change: S3 settings row 1 (frame 196)
+  warn: [video 60fps] no-change: S3 settings row 2 (frame 209)
+  warn: [video 60fps] no-change: S3 settings row 3 (frame 222)
+  warn: [video 60fps] no-change: S3 settings row 4 (frame 235)
+  warn: [video 60fps] no-change: S3 settings row 5 (frame 248)
+  warn: [video 60fps] no-change: S3 settings row 6 (frame 261)
+  warn: [video 60fps] no-change: S5 char 2 (frame 594)
+  warn: [video 60fps] no-change: S5 char 6 (frame 620)
+  warn: [video 60fps] no-change: S5 char 7 (frame 627)
+  warn: [video 60fps] no-change: S5 char 8 (frame 633)
+  warn: [video 60fps] no-change: S5 char 10 (frame 646)
+  warn: [video 60fps] no-change: S5 char 11 (frame 653)
+  warn: [video 60fps] no-change: S5 char 12 (frame 659)
+  warn: [video 60fps] no-change: S5 Nipsey row locks (808) (frame 718)
+  warn: [video 60fps] no-change: S6 plate slam (L7) (frame 796)
+  warn: [video 60fps] no-change: S6 column 1 locks (frame 816)
+  warn: [video 60fps] no-change: S6 column 2 locks (frame 822)
+  warn: [video 60fps] no-change: S6 column 3 locks (frame 829)
+  warn: [video 60fps] no-change: S6 column 4 locks (frame 835)
+  warn: [video 60fps] no-change: S6 column 5 locks (frame 842)
+  warn: [video 60fps] no-change: S6 column 6 locks (frame 848)
+  warn: [video 60fps] no-change: S6 column 7 locks (frame 855)
+  warn: [video 60fps] no-change: S6 column 8 locks (frame 861)
+  warn: [video 60fps] no-change: S6 column 9 locks (frame 868)
+  warn: [video 60fps] no-change: S7 hex char 1 (frame 933)
+  warn: [video 60fps] no-change: S7 hex char 2 (frame 940)
+  warn: [video 60fps] no-change: S7 hex char 3 (frame 946)
+  warn: [video 60fps] no-change: S7 white full (frame 979)
+verify_sync: PASS

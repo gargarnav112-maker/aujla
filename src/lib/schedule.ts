@@ -32,6 +32,9 @@ const end = audioEnd + cfg.endCardSeconds;
 const manakChars = cfg.manakArtist.length;
 const plateCols = cfg.plateText.replace(/\s/g, '').length;
 const L7hero = hero('L7', L('L7').start + 3 * beat);
+// One plate column per 8th, ending on L7's hero word; if the columns don't fit
+// between the slam (+ one 8th) and the hero word, fall back to 16ths.
+const plateDiv = (plateCols - 1) * e8 <= L7hero - (L('L7').start + e8) + 1e-6 ? e8 : s16;
 
 export const S = {
 	beat,
@@ -91,7 +94,8 @@ export const S = {
 		start: L('L7').start,
 		end: L('L8').start,
 		slam: L('L7').start,
-		locks: Array.from({length: plateCols}, (_, i) => L7hero - (plateCols - 1 - i) * e8),
+		locks: Array.from({length: plateCols}, (_, i) => L7hero - (plateCols - 1 - i) * plateDiv),
+		lockDivision: plateDiv === e8 ? '8th' : '16th',
 		lastLock: L7hero,
 	},
 	s7: {
@@ -108,39 +112,56 @@ export const S = {
 		slam: slamB,
 		pullBack: slamB + 2 * beat,
 		cardAway: slamB + 4 * beat,
-		handleGlow: slamB + 5 * beat,
-		endCard: audioEnd - beat,
+		handleGlow: slamB + 4 * beat, // the card slides away and the handle blooms on the same beat
+		endCard: slamB + 5 * beat,
 	},
 } as const;
 
 /** Light scenes: the watermark drops to the bottom-left. */
 export const LIGHT_RANGES: [number, number][] = [[S.s7.floodStart, S.s7.end]];
 
-/** All "hit" events (scene boundaries, slams, flips, locks, lands, flashes) for QA. */
-export const HITS: {name: string; t: number; onGrid: boolean}[] = [
-	{name: 'S0 phone lands / island (beat 0)', t: S.s0.phoneLand, onGrid: true},
-	{name: 'S0 headphones pill', t: S.s0.pill, onGrid: true},
-	{name: 'S1 start: 808 enters → map push', t: S.s1.start, onGrid: true},
-	{name: 'S1 pin lands', t: S.s1.pinLand, onGrid: true},
-	{name: 'S2 start: grey flip (808 drops)', t: S.s2.greyFlip, onGrid: false},
-	{name: 'S3 SLAM A flash', t: S.s3.slam, onGrid: true},
-	{name: 'S3 toggle flips ON (L2 hero)', t: S.s3.toggle, onGrid: true},
-	{name: 'S3 ad-lib 1', t: S.s3.adlib, onGrid: true},
-	{name: 'S4 whip in (L3)', t: S.s4.start, onGrid: true},
-	{name: 'S4 widget drop (L4)', t: S.s4.l4, onGrid: true},
-	...S.s4.fills.map((t, i) => ({name: `S4 fill step ${i + 1}`, t, onGrid: true})),
-	{name: 'S5 whip in / search (L5)', t: S.s5.start, onGrid: true},
-	{name: 'S5 last char + tap', t: S.s5.tap, onGrid: true},
-	{name: 'S5 queue sheet (L6)', t: S.s5.queue, onGrid: true},
-	{name: 'S5 Nipsey row locks (808)', t: S.s5.lock, onGrid: true},
-	{name: 'S5 ad-lib 2', t: S.s5.adlib, onGrid: true},
-	{name: 'S6 plate slam (L7)', t: S.s6.slam, onGrid: true},
-	{name: 'S6 last column lock', t: S.s6.lastLock, onGrid: true},
-	{name: 'S7 picker (L8)', t: S.s7.start, onGrid: true},
-	{name: 'S7 loupe lands (808)', t: S.s7.loupeLand, onGrid: true},
-	{name: 'S7 white full', t: S.s7.floodFull, onGrid: true},
-	{name: 'S8 SLAM B → pin', t: S.s8.slam, onGrid: true},
-	{name: 'S8 pull back', t: S.s8.pullBack, onGrid: true},
+/**
+ * Grid a hit must sit on: quarter beat, 8th, 16th, a measured audio event (dropout edge), or 'lyric'
+ * (anchored to a line/hero time from lyrics-timing.json: the 8th grid tap-sync snaps to, or the exact tapped time).
+ */
+export type Grid = 'beat' | '8th' | '16th' | 'audio' | 'lyric';
+export type Hit = {name: string; t: number; grid: Grid; kind: 'boundary' | 'hit'};
+
+/** Every scene boundary and hit (slams, flips, locks, lands, flashes) for tools/verify_sync.py. */
+export const HITS: Hit[] = [
+	{name: 'S0→S1 boundary (808 enters)', t: S.s1.start, grid: 'beat', kind: 'boundary'},
+	{name: 'S1→S2 boundary (808 drops out)', t: S.s2.start, grid: 'audio', kind: 'boundary'},
+	{name: 'S2→S3 boundary (SLAM A)', t: S.s3.start, grid: 'beat', kind: 'boundary'},
+	{name: 'S3→S4 boundary (L3)', t: S.s4.start, grid: 'lyric', kind: 'boundary'},
+	{name: 'S4→S5 boundary (L5)', t: S.s5.start, grid: 'lyric', kind: 'boundary'},
+	{name: 'S5→S6 boundary (L7)', t: S.s6.start, grid: 'lyric', kind: 'boundary'},
+	{name: 'S6→S7 boundary (L8)', t: S.s7.start, grid: 'lyric', kind: 'boundary'},
+	{name: 'S7→S8 boundary (SLAM B)', t: S.s8.start, grid: 'beat', kind: 'boundary'},
+	{name: 'S0 phone lands / island expands (beat 0)', t: S.s0.phoneLand, grid: 'beat', kind: 'hit'},
+	{name: 'S0 headphones pill', t: S.s0.pill, grid: 'beat', kind: 'hit'},
+	{name: 'S1 pin lands', t: S.s1.pinLand, grid: 'beat', kind: 'hit'},
+	{name: 'S2 grey flip', t: S.s2.greyFlip, grid: 'audio', kind: 'hit'},
+	{name: 'S3 SLAM A flash + punch', t: S.s3.slam, grid: 'beat', kind: 'hit'},
+	...Array.from({length: 7}, (_, i) => ({name: `S3 settings row ${i + 1}`, t: S.s3.rowsFrom + i * e8, grid: '8th' as Grid, kind: 'hit' as const})),
+	{name: 'S3 toggle flips ON (L2 hero)', t: S.s3.toggle, grid: 'lyric', kind: 'hit'},
+	{name: 'S3 ad-lib 1', t: S.s3.adlib, grid: 'lyric', kind: 'hit'},
+	{name: 'S4 widget drop (L4)', t: S.s4.l4, grid: 'lyric', kind: 'hit'},
+	...S.s4.fills.map((t, i) => ({name: `S4 fill step ${i + 1}`, t, grid: 'lyric' as Grid, kind: 'hit' as const})),
+	{name: 'S4 brim (L4 hero)', t: S.s4.brim, grid: 'lyric', kind: 'hit'},
+	...S.s5.chars.map((t, i) => ({name: `S5 char ${i + 1}`, t, grid: 'lyric' as Grid, kind: 'hit' as const})),
+	{name: 'S5 tap', t: S.s5.tap, grid: 'lyric', kind: 'hit'},
+	{name: 'S5 queue sheet (L6)', t: S.s5.queue, grid: 'lyric', kind: 'hit'},
+	{name: 'S5 Nipsey row locks (808)', t: S.s5.lock, grid: 'beat', kind: 'hit'},
+	{name: 'S5 ad-lib 2', t: S.s5.adlib, grid: 'lyric', kind: 'hit'},
+	{name: 'S6 plate slam (L7)', t: S.s6.slam, grid: 'lyric', kind: 'hit'},
+	...S.s6.locks.map((t, i) => ({name: `S6 column ${i + 1} locks`, t, grid: 'lyric' as Grid, kind: 'hit' as const})),
+	{name: 'S7 loupe lands (808)', t: S.s7.loupeLand, grid: 'beat', kind: 'hit'},
+	...S.s7.hexChars.map((t, i) => ({name: `S7 hex char ${i + 1}`, t, grid: '16th' as Grid, kind: 'hit' as const})),
+	{name: 'S7 flood starts (808 vanishes)', t: S.s7.floodStart, grid: 'audio', kind: 'hit'},
+	{name: 'S7 white full', t: S.s7.floodFull, grid: 'beat', kind: 'hit'},
+	{name: 'S8 SLAM B → pin + ring', t: S.s8.slam, grid: 'beat', kind: 'hit'},
+	{name: 'S8 pull back', t: S.s8.pullBack, grid: 'beat', kind: 'hit'},
+	{name: 'S8 card away / handle bloom', t: S.s8.cardAway, grid: 'beat', kind: 'hit'},
 ];
 
 export const beatIdx = beatIndexOfTime;

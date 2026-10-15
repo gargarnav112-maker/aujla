@@ -1,0 +1,8 @@
+<!-- Hand-drawn parallax mask for art-wide.png (2144×1206).
+     Foreground = the car (with the masked crew in the windows) + the man.
+     Used by tools/make_parallax.py to cut public/img/art-fg.png and an
+     inpainted background plate public/img/art-bg.png. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2144 1206" width="2144" height="1206">
+  <path id="car" fill="#fff" d="M 290 648 L 330 630 L 430 616 L 560 604 L 700 598 L 760 600 L 800 575 L 850 540 L 905 505 L 950 486 L 1100 476 L 1300 472 L 1420 478 L 1470 498 L 1520 545 L 1555 600 L 1750 598 L 1900 606 L 2040 622 L 2085 640 L 2100 690 L 2112 750 L 2108 800 L 2060 815 L 1980 822 L 1600 838 L 1590 880 L 1530 893 L 1450 888 L 1420 845 L 1100 842 L 700 838 L 640 872 L 560 878 L 470 872 L 430 835 L 340 822 L 300 800 L 282 740 L 284 690 Z"/>
+  <path id="man" fill="#fff" d="M 1600 392 L 1612 376 L 1640 374 L 1660 392 L 1662 440 L 1655 470 L 1690 490 L 1722 505 L 1742 560 L 1748 640 L 1740 700 L 1712 722 L 1706 820 L 1702 960 L 1712 1010 L 1700 1040 L 1665 1042 L 1660 1000 L 1640 998 L 1585 995 L 1578 980 L 1582 900 L 1576 760 L 1565 745 L 1550 690 L 1546 600 L 1552 530 L 1575 505 L 1610 490 L 1605 460 L 1598 430 Z"/>
+</svg>
