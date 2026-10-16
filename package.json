@@ -8,12 +8,12 @@
     "studio": "remotion studio",
     "proof": "remotion render SyncProof out/sync-proof.mp4 --crf=20",
     "qa": "python3 tools/verify_sync.py && remotion render Main1x1 qa/preview-qa60.mp4 --scale=0.5 --props='{\"qa\":true}' --crf=16 --muted && python3 tools/verify_sync.py --video qa/preview-qa60.mp4 && bash tools/qa_stills.sh && python3 tools/motion_curve.py qa/preview-qa60.mp4 --own",
-    "render:1x1": "remotion render Main1x1 out/straight-up_1x1_60fps.mp4 --crf=15 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k",
-    "render:9x16": "remotion render Main9x16 out/straight-up_9x16_60fps.mp4 --crf=15 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k",
+    "render:1x1": "remotion render Main1x1 out/straight-up_1x1_60fps.mp4 --crf=15 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k --color-space=bt709",
+    "render:9x16": "remotion render Main9x16 out/straight-up_9x16_60fps.mp4 --crf=15 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k --color-space=bt709",
     "typecheck": "tsc --noEmit",
     "prepare-assets": "bash tools/prepare_assets.sh && bash tools/make_tail.sh",
     "timing:h1": "python3 tools/make_h1_timing.py",
-    "render:1x1-30": "remotion render Main1x1At30 out/straight-up_1x1_30fps.mp4 --crf=15 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k"
+    "render:1x1-30": "remotion render Main1x1At30 out/straight-up_1x1_30fps.mp4 --crf=15 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k --color-space=bt709"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.535",

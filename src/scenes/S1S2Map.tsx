@@ -37,7 +37,7 @@ const Inner: React.FC = () => {
 		<AbsoluteFill style={{backgroundColor: '#000'}}>
 			<AbsoluteFill style={{scale: String(1 + 0.6 * enter), filter: enter > 0.01 ? `blur(${(enter * 10).toFixed(2)}px)` : undefined}}>
 				<MapStage scale={cam.scale} center={cam.center} grey={grey} pulse={pulse} dot={draw > 0 ? 0 : 1} punjab={1 - grey * 0.6} states={0.5 * (1 - grey)} />
-				<AbsoluteFill style={{backgroundColor: '#000', opacity: mapDim}} />
+				<AbsoluteFill style={{backgroundColor: '#E5E5EA', opacity: mapDim / 0.55}} />
 			</AbsoluteFill>
 			{draw > 0 ? <OutlineCard from={[540, 540]} draw={draw} morph={morph} card={card} dotPulse={pulse} /> : null}
 			<div style={{position: 'absolute', left: 0, right: 0, bottom: 120, display: 'flex', justifyContent: 'center', opacity: chipOut * Math.min(1, chipP * 4)}}>

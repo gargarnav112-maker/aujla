@@ -1,24 +1,41 @@
 # Reference breakdown
 
-## Status: the reference clip was not supplied
+## Status: measured (reference received in chat)
 
-`reference/style-ref.mp4` never reached this session: the repo was empty, and only the cover, the screen recording and the lyrics were sent. Phase 1 could not be **measured**:
+The clip and an iOS lock-screen screenshot arrived later in the session. They're saved as `reference/style-ref.mp4` and `reference/lockscreen-ref.jpg`.
 
-- no 10 fps contact sheets;
-- no motion-difference curve;
-- no beat-tracking of the reference audio.
+- **Contact sheets:** 10 fps, `qa/ref-sheet-1..3.png`.
+- **Motion curve vs its own beat grid:** `qa/ref-motion.png`, made with `python3 tools/motion_curve.py reference/style-ref.mp4`.
+- **Peak timing:** of its 14 largest cuts, **5 land on a beat** (0 / −1 frame at 30 fps). The others mostly land **+1 to +3 frames after** the beat, e.g. 1.67, 2.87, 5.13 and 7.40 s at +1/+2.
+  - The brief's "10 of 12 within ±1 frame" holds only if you count +1 as on.
+  - Our edit is at 0 frames on every hit (`verify_sync.py`).
+- **Verified moves** (the brief's table holds; corrections in bold):
+  - 0.0–0.3: phone back → flip;
+  - 0.3–0.9: phone tilts, red "Connect" pill drops;
+  - 1.0–1.6: **red wash under the pill**;
+  - 1.7–2.7: **deep-blue satellite ocean**, blue dot;
+  - 2.8: **white zoom-flash**, then grey map with labels;
+  - 4.1–4.4: dotted route from the dot;
+  - 4.5–5.0: Texas outline in a white card **on light grey #E5E5EA**;
+  - 5.1–5.9: Apple-Maps-style map, "TX" pill pin;
+  - 6.2–7.2: bloom, sports-icon pill pops;
+  - 7.4–8.3: typing bubble on black;
+  - 8.4–9.7: blue lyric bubble on light grey;
+  - 9.8–10.8: the ad-lib "yuh!" inside a **dark chat bubble** over two photo tiles, with RGB split;
+  - 10.8–12.5: neon yellow/pink tiles, the search field types an album;
+  - 12.5–14.6: album page, motion-blurred tracklist scroll, pink row;
+  - 14.7–17.0: the creator's name with a purple bloom;
+  - 17.0–21.0: glyph + handle end card.
+- **What changed in our edit from this study:**
+  - lock-screen now-playing opening (from the screenshot);
+  - red-filled Connect pill;
+  - deep-blue ocean with the iOS-blue location dot;
+  - Punjab card forming on light grey;
+  - ad-libs as dark chat bubbles with tails;
+  - the closing name bloom is **Karan Aujla**;
+  - no handle or watermark, at your request.
 
-The table below is the brief's own breakdown, kept as the working spec and marked **unverified**. The tooling is ready, so the study takes about two minutes once the file lands:
-
-```bash
-# 10 fps contact sheets (timestamped)
-mkdir -p qa/ref && ffmpeg -i reference/style-ref.mp4 -vf fps=10,scale=240:-1 qa/ref/f%04d.png
-tools/contact_sheet.sh qa/ref-sheet.png 10 240 10 qa/ref/f*.png
-# motion-difference curve vs. its beat grid (same method as qa/motion-vs-beats.png)
-python3 tools/motion_curve.py reference/style-ref.mp4 --out qa/ref-motion.png
-```
-
-## The brief's breakdown (unverified) and where each move lives in our edit
+## Reference moves and where each lives in our edit
 
 | Ref time (s) | Reference move | Lands on | Our equivalent | Our time (s) |
 |---|---|---|---|---|

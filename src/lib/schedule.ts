@@ -112,13 +112,16 @@ export const S = {
 		slam: slamB,
 		pullBack: slamB + 2 * beat,
 		cardAway: slamB + 4 * beat,
-		handleGlow: slamB + 4 * beat, // the card slides away and the handle blooms on the same beat
+		nameGlow: slamB + 4 * beat, // the card slides away and the name blooms on the same beat
 		endCard: slamB + 5 * beat,
 	},
 } as const;
 
-/** Light scenes: the watermark drops to the bottom-left. */
-export const LIGHT_RANGES: [number, number][] = [[S.s7.floodStart, S.s7.end]];
+/** Light scenes (white flood): grain switches to multiply, vignette off. */
+export const LIGHT_RANGES: [number, number][] = [
+	[S.s2.silence[1], S.s3.slam + e8], // Punjab card on light grey → white snap
+	[S.s7.floodStart, S.s7.end],
+];
 
 /**
  * Grid a hit must sit on: quarter beat, 8th, 16th, a measured audio event (dropout edge), or 'lyric'
@@ -161,7 +164,7 @@ export const HITS: Hit[] = [
 	{name: 'S7 white full', t: S.s7.floodFull, grid: 'beat', kind: 'hit'},
 	{name: 'S8 SLAM B → pin + ring', t: S.s8.slam, grid: 'beat', kind: 'hit'},
 	{name: 'S8 pull back', t: S.s8.pullBack, grid: 'beat', kind: 'hit'},
-	{name: 'S8 card away / handle bloom', t: S.s8.cardAway, grid: 'beat', kind: 'hit'},
+	{name: 'S8 card away / name bloom', t: S.s8.cardAway, grid: 'beat', kind: 'hit'},
 ];
 
 export const beatIdx = beatIndexOfTime;

@@ -52,7 +52,10 @@ def main():
         drops = [(x["start"], x["end"]) for x in B["dropouts"]]
     else:
         import librosa
-        y, sr = librosa.load(a.video, sr=22050)
+        import tempfile
+        wav = tempfile.NamedTemporaryFile(suffix=".wav", delete=False).name
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", a.video, "-vn", "-ac", "1", "-ar", "22050", wav], check=True)
+        y, sr = librosa.load(wav, sr=22050)
         tempo, bf = librosa.beat.beat_track(y=y, sr=sr)
         beats = list(librosa.frames_to_time(bf, sr=sr))
         bars, acc, drops = beats[::4], [], []

@@ -80,15 +80,15 @@ export const OutlineCard: React.FC<{from: [number, number]; draw: number; morph:
 		<svg width={1080} height={1080} viewBox="0 0 1080 1080" style={{position: 'absolute', inset: 0}}>
 			{card > 0 ? (
 				<g transform={`translate(540 540) scale(${s}) translate(-540 -540)`} opacity={Math.min(1, card * 1.6)}>
-					<rect x={CARD.x} y={CARD.y + 14} width={CARD.w} height={CARD.h} rx={CARD.r} fill="#000" opacity={0.35} filter="blur(18px)" />
-					<rect x={CARD.x} y={CARD.y} width={CARD.w} height={CARD.h} rx={CARD.r} fill="#F7F4F1" />
+					<rect x={CARD.x} y={CARD.y + 14} width={CARD.w} height={CARD.h} rx={CARD.r} fill="#000" opacity={0.18} filter="blur(18px)" />
+					<rect x={CARD.x} y={CARD.y} width={CARD.w} height={CARD.h} rx={CARD.r} fill="#FFFFFF" />
 				</g>
 			) : null}
 			<path d={d} fill="none" stroke={stroke} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="0.1 13" />
 			{morph >= 0.999 ? <path d={PUNJAB_CARD_PATH} fill={C.oxblood} fillOpacity={0.07} stroke="none" /> : null}
-			<circle cx={dot[0]} cy={dot[1]} r={16 + 10 * dotPulse} fill={C.accentGlow} opacity={0.25} />
+			<circle cx={dot[0]} cy={dot[1]} r={16 + 10 * dotPulse} fill={C.bubbleBlue} opacity={0.25} />
 			<circle cx={dot[0]} cy={dot[1]} r={9} fill="#fff" />
-			<circle cx={dot[0]} cy={dot[1]} r={6.5} fill={C.accentGlow} />
+			<circle cx={dot[0]} cy={dot[1]} r={6.5} fill={C.bubbleBlue} />
 		</svg>
 	);
 };

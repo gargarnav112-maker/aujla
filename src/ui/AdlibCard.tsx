@@ -22,9 +22,14 @@ export const AdlibCard: React.FC<{text: string; fx: number; visible: boolean; ro
 					letterSpacing: '-0.03em',
 					color: C.parchment,
 					whiteSpace: 'nowrap',
+					position: 'relative',
 				}}
 			>
 				{text}
+				{/* chat-bubble tail (as the reference's ad-lib bubble) */}
+				<svg width={56} height={44} viewBox="0 0 56 44" style={{position: 'absolute', right: -18, bottom: -14}}>
+					<path d="M0 0 C 6 22, 22 38, 54 42 C 36 30, 34 14, 34 0 Z" fill={C.panel} />
+				</svg>
 			</div>
 		</RGBSplit>
 	);

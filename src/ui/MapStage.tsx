@@ -223,12 +223,12 @@ export const MapStage: React.FC<MapProps> = ({scale, center, grey = 0, dot = 1, 
 			<svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
 				<defs>
 					<radialGradient id="sea" cx="50%" cy="45%" r="75%">
-						<stop offset="0%" stopColor="#2c3438" />
-						<stop offset="100%" stopColor="#161b1e" />
+						<stop offset="0%" stopColor="#123a9c" />
+						<stop offset="100%" stopColor="#06154a" />
 					</radialGradient>
 					<linearGradient id="landg" x1="0" y1="0" x2="1" y2="1">
-						<stop offset="0%" stopColor="#5a5845" />
-						<stop offset="55%" stopColor="#4d4a3a" />
+						<stop offset="0%" stopColor="#4f6a45" />
+						<stop offset="55%" stopColor="#4a5a3c" />
 						<stop offset="100%" stopColor={C.earth} />
 					</linearGradient>
 				</defs>
@@ -252,7 +252,7 @@ export const MapStage: React.FC<MapProps> = ({scale, center, grey = 0, dot = 1, 
 				) : null}
 				<TerrainNoise scale={scale} anchor={anchor} strength={0.6 - 0.3 * Math.max(macroOn, fieldsOn)} />
 				{/* slate grade */}
-				<rect width={SIZE} height={SIZE} fill={C.slate} opacity={0.32} style={{mixBlendMode: 'color'}} />
+				<rect width={SIZE} height={SIZE} fill={C.slate} opacity={0.12} style={{mixBlendMode: 'color'}} />
 				<rect width={SIZE} height={SIZE} fill={C.slateDeep} opacity={0.18} style={{mixBlendMode: 'multiply'}} />
 				{st > 0
 					? states.features
@@ -269,10 +269,10 @@ export const MapStage: React.FC<MapProps> = ({scale, center, grey = 0, dot = 1, 
 
 export const LocationDot: React.FC<{x: number; y: number; pulse: number; opacity?: number}> = ({x, y, pulse, opacity = 1}) => (
 	<g opacity={opacity}>
-		<circle cx={x} cy={y} r={26 + 34 * (1 - pulse)} fill={C.accentGlow} opacity={0.28 * pulse} />
-		<circle cx={x} cy={y} r={22} fill={C.accentGlow} opacity={0.22} />
-		<circle cx={x} cy={y} r={13} fill="#fff" />
-		<circle cx={x} cy={y} r={9.5 * (1 + 0.12 * pulse)} fill={C.accentGlow} />
+		<circle cx={x} cy={y} r={30 + 40 * (1 - pulse)} fill={C.bubbleBlue} opacity={0.3 * pulse} />
+		<circle cx={x} cy={y} r={30} fill={C.bubbleBlue} opacity={0.22} />
+		<circle cx={x} cy={y} r={17} fill="#fff" />
+		<circle cx={x} cy={y} r={12.5 * (1 + 0.12 * pulse)} fill={C.bubbleBlue} />
 	</g>
 );
 

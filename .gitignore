@@ -7,3 +7,5 @@ out/*.tmp
 qa/s[0-9]*/
 qa/*.npy
 qa/render-*.log
+out/straight-up_*.mp4
+out/render-*.log

@@ -10,6 +10,7 @@ import {f60, hexA, springPop, springSlam, whipIn} from '../motion';
 import {Blur} from '../fx/Whip';
 import {C} from '../theme';
 import {F} from '../fonts';
+import cfg from '../data/config.json';
 
 // Thumbnail centre in stage coords (phone centred; island expanded) — the push-through target.
 const THUMB = {x: 540 - 196 + 14 + 29, y: 540 - PHONE.h / 2 + 13 + 12 + 42};
@@ -43,7 +44,7 @@ const Inner: React.FC = () => {
 						}}
 					>
 						<Device sheen={frame < secToFrame(S.s0.phoneLand, fps) ? Math.max(0, 1 - land) : 0}>
-							<LockScreen />
+							<LockScreen progress={Math.min(1, (165 + frame / fps) / cfg.trackSeconds)} />
 							{/* red wash when the headphones connect */}
 							<AbsoluteFill style={{background: `radial-gradient(ellipse 90% 45% at 50% 0%, ${hexA(C.accentGlow, 0.55 * wash)} 0%, rgba(0,0,0,0) 70%)`}} />
 							<Island p={island}>
@@ -62,16 +63,16 @@ const Inner: React.FC = () => {
 									gap: 12,
 									padding: '10px 22px 10px 10px',
 									borderRadius: 999,
-									background: 'rgba(28,28,30,0.92)',
-									boxShadow: `0 0 0 1px ${hexA(C.accentGlow, 0.5)}, 0 8px 24px rgba(0,0,0,0.5), 0 0 28px ${hexA(C.accentGlow, 0.35 * pill)}`,
+									background: `linear-gradient(180deg, #E0434D, ${C.accentGlow})`,
+									boxShadow: `0 8px 24px rgba(0,0,0,0.5), 0 0 36px ${hexA(C.accentGlow, 0.5 * pill)}`,
 									fontFamily: F.ui,
 									whiteSpace: 'nowrap',
 								}}
 							>
-								<div style={{width: 44, height: 44, borderRadius: 22, background: C.accentGlow, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+								<div style={{width: 44, height: 44, borderRadius: 22, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 									<Headphones size={26} />
 								</div>
-								<div style={{fontSize: 20, fontWeight: 600, color: C.label, letterSpacing: '-0.01em'}}>Connected</div>
+								<div style={{fontSize: 20, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em'}}>Connected</div>
 							</div>
 						</Device>
 					</div>

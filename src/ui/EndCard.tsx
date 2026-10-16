@@ -3,17 +3,16 @@ import cfg from '../data/config.json';
 import {F} from '../fonts';
 import {C} from '../theme';
 import {glow, hexA} from '../motion';
-import {PinGlyph} from './glyphs';
 import {coordText} from './CoordChip';
 
-/** Handle with oxblood bloom (bloom 0..1) and the cover coordinates; clean end card at bloom ≈ 0. */
-export const EndCard: React.FC<{bloom: number; reveal: number}> = ({bloom, reveal}) => (
-	<div style={{position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 26}}>
-		<div style={{position: 'absolute', width: 900, height: 420, borderRadius: '50%', background: `radial-gradient(ellipse at center, ${hexA(C.oxbloodHi, 0.75 * bloom)} 0%, ${hexA(C.oxblood, 0.35 * bloom)} 40%, rgba(0,0,0,0) 72%)`, filter: 'blur(30px)'}} />
-		<div style={{display: 'flex', alignItems: 'center', gap: 18, opacity: reveal, translate: `0px ${(1 - reveal) * 30}px`, filter: bloom > 0.02 ? glow(C.accentGlow) : undefined}}>
-			<PinGlyph size={64} color={C.accentGlow} />
-			<div style={{fontFamily: F.ui, fontWeight: 700, fontSize: 96, letterSpacing: '-0.03em', color: C.label}}>@{cfg.handle}</div>
+/** Artist name with an oxblood bloom (bloom 0..1), song title and the cover coordinates. */
+export const EndCard: React.FC<{bloom: number; reveal: number; meta: number}> = ({bloom, reveal, meta}) => (
+	<div style={{position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 18}}>
+		<div style={{position: 'absolute', width: 980, height: 460, borderRadius: '50%', background: `radial-gradient(ellipse at center, ${hexA(C.accentGlow, 0.7 * bloom)} 0%, ${hexA(C.oxblood, 0.4 * bloom)} 40%, rgba(0,0,0,0) 72%)`, filter: 'blur(34px)'}} />
+		<div style={{fontFamily: F.ui, fontWeight: 700, fontSize: 112, letterSpacing: '-0.03em', color: `color-mix(in srgb, #ffffff ${100 - 45 * bloom}%, ${C.accentGlow})`, opacity: reveal, translate: `0px ${(1 - reveal) * 30}px`, filter: bloom > 0.02 ? glow(C.accentGlow) : undefined, whiteSpace: 'nowrap'}}>
+			{cfg.artist}
 		</div>
-		<div style={{fontFamily: F.mono, fontWeight: 600, fontSize: 30, color: C.bone, letterSpacing: '0.06em', whiteSpace: 'pre', opacity: reveal * 0.9}}>{coordText()}</div>
+		<div style={{fontFamily: F.ui, fontWeight: 600, fontSize: 34, color: C.parchment, letterSpacing: '0.18em', textTransform: 'uppercase', opacity: meta}}>{cfg.songTitle}</div>
+		<div style={{fontFamily: F.mono, fontWeight: 600, fontSize: 28, color: C.bone, letterSpacing: '0.06em', whiteSpace: 'pre', opacity: meta * 0.9}}>{coordText()}</div>
 	</div>
 );

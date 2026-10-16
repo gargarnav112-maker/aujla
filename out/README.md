@@ -11,7 +11,7 @@
 - song clip 0–17.210 s;
 - fade 17.03–17.21 s;
 - echo tail to 18.810 s;
-- end card to 20.000 s.
+- *Karan Aujla* name bloom and end card to 20.000 s (no handle, no watermark).
 
 Duration = clip + `tailSeconds` + `endCardSeconds` (from `calculateMetadata`).
 
@@ -103,4 +103,4 @@ Every hit sits **0 frames** off its grid point at both 60 and 30 fps (`tools/ver
 | 65 | S7→S8 boundary (SLAM B) | 16.748 | 1005 | 502 | beat |
 | 66 | S8 SLAM B → pin + ring | 16.748 | 1005 | 502 | beat |
 | 67 | S8 pull back | 17.618 | 1057 | 529 | beat |
-| 68 | S8 card away / handle bloom | 18.488 | 1109 | 555 | beat |
+| 68 | S8 card away / name bloom | 18.488 | 1109 | 555 | beat |

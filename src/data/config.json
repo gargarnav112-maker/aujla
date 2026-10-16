@@ -1,5 +1,4 @@
 {
-  "handle": "yourhandle",
   "songTitle": "Straight Up",
   "artist": "Karan Aujla",
   "plateText": "PB 10 AJ 0001",
@@ -13,5 +12,8 @@
     "lon": 76.103
   },
   "tailSeconds": 1.6,
-  "endCardSeconds": 1.19
+  "endCardSeconds": 1.19,
+  "lockTime": "9:39",
+  "lockDate": "Thu 15 Oct",
+  "trackSeconds": 215
 }

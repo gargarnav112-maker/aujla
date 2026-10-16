@@ -164,3 +164,33 @@ The brief's grid tracks the 808 body. The hats, snare and clap transients land 3
 - `verify_sync` still **PASS**, with the expected warning that L5 no longer coincides with an 808.
 - **Fix** found by this test: lyric-anchored events were held to the quarter grid. They now verify against the lyric grid (16ths, or the exact tapped time when snap is off).
 - The H1 file was restored byte-identical (`git diff` empty).
+
+## 7. Round 2: your feedback + the real reference
+
+What you asked for:
+1. The artist is **Karan Aujla**.
+2. **Remove the handle.**
+3. Take the style from the uploaded clip.
+4. You sent a lock-screen screenshot.
+
+Changes:
+- **Handle removed everywhere.**
+  - `Watermark.tsx` deleted; `handle` removed from config.
+  - The name moment and end card now read **Karan Aujla**, with an oxblood/`accentGlow` bloom (the reference's name move) over *STRAIGHT UP* and the cover coordinates. The edit still opens and closes on 30.694° N 76.103° E.
+- **Opening rebuilt from the screenshot:**
+  - header: 9:39 · Thu 15 Oct;
+  - large rounded artwork card;
+  - glass now-playing panel (*Straight Up / Karan Aujla*) with a live scrubber from 2:45 of 3:35 (−0:50);
+  - star / previous / pause / next / output glyphs;
+  - flashlight and camera buttons.
+  
+  All drawn from primitives, no logos. The island live activity and the Connect pill (now red-filled, as in the reference) stay.
+- **Map colour follows the reference:**
+  - deep-blue ocean, greener land, the slate grade reduced to 12 %;
+  - iOS-blue location dot (`#0A84FF`).
+  
+  The grey flip on the dropout is unchanged (the reference does it too).
+- **Punjab card on light grey `#E5E5EA`,** as in the reference. That stretch and the white snap count as *light* ranges: no vignette, multiply grain. The first version had dark vignette corners on the grey.
+- **Ad-lib cards are dark chat bubbles with tails** (the reference's "yuh!" bubble).
+- **Render colour:** the first finals came out `yuvj420p` (full range). The renders now pass `--color-space=bt709`, giving `yuv420p`, tv range, tagged BT.709 (checked on a 10-frame test).
+- `verify_sync.py` still **PASS**: no event times changed.

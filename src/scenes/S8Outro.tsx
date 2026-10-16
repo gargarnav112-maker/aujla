@@ -24,7 +24,7 @@ const Inner: React.FC = () => {
 	const ring = d >= 0 ? d / f60(26, fps) : -1;
 	const pinS = 1.45 * (1.25 - 0.25 * collapse);
 	const p = cam.pullP;
-	// card slides away and the handle blooms on the same beat
+	// card slides away and the artist name blooms on the same beat
 	const awayF = F(S.s8.cardAway);
 	const away = interpolate(frame, [awayF - f60(whipIn.frames, fps), awayF], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: whipIn.easing});
 	const reveal = interpolate(frame, [awayF, awayF + f60(whipOut.frames, fps)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: whipOut.easing});
@@ -47,7 +47,7 @@ const Inner: React.FC = () => {
 					) : null}
 				</AbsoluteFill>
 			) : null}
-			{frame >= awayF ? <EndCard bloom={bloom} reveal={reveal} /> : null}
+			{frame >= awayF ? <EndCard bloom={bloom} reveal={reveal} meta={interpolate(frame, [F(S.s8.endCard), F(S.s8.endCard) + f60(14, fps)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} /> : null}
 		</AbsoluteFill>
 	);
 };
