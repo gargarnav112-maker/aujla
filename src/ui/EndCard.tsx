@@ -4,6 +4,7 @@ import {F} from '../fonts';
 import {C} from '../theme';
 import {glow, hexA} from '../motion';
 import {coordText} from './CoordChip';
+import {PinGlyph} from './glyphs';
 
 /** Artist name with an oxblood bloom (bloom 0..1), song title and the cover coordinates. */
 export const EndCard: React.FC<{bloom: number; reveal: number; meta: number}> = ({bloom, reveal, meta}) => (
@@ -14,5 +15,8 @@ export const EndCard: React.FC<{bloom: number; reveal: number; meta: number}> = 
 		</div>
 		<div style={{fontFamily: F.ui, fontWeight: 600, fontSize: 34, color: C.parchment, letterSpacing: '0.18em', textTransform: 'uppercase', opacity: meta}}>{cfg.songTitle}</div>
 		<div style={{fontFamily: F.mono, fontWeight: 600, fontSize: 28, color: C.bone, letterSpacing: '0.06em', whiteSpace: 'pre', opacity: meta * 0.9}}>{coordText()}</div>
+		<div style={{display: 'flex', alignItems: 'center', gap: 10, marginTop: 34, fontFamily: F.ui, fontWeight: 600, fontSize: 32, color: C.label, letterSpacing: '-0.01em', opacity: meta}}>
+			<PinGlyph size={34} color={C.accentGlow} />@{cfg.handle}
+		</div>
 	</div>
 );

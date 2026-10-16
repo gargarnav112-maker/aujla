@@ -6,6 +6,7 @@ import {f60} from './motion';
 import {Scene} from './scenes/Scene';
 import {S0ColdOpen} from './scenes/S0ColdOpen';
 import {Grain} from './fx/Grain';
+import {Watermark} from './ui/Watermark';
 import {Vignette} from './fx/Vignette';
 import {Flash} from './fx/Flash';
 import {SCENES_EXTRA} from './scenes';
@@ -37,6 +38,7 @@ export const Stage: React.FC = () => {
 			</AbsoluteFill>
 			<Flash at={[S.s3.slam]} />
 			<Vignette strength={light ? 0 : 0.22 + 0.18 * s2} />
+			<Watermark />
 			{getInputProps().qa ? null : <Grain opacity={0.035 + 0.025 * s2} light={light} />}
 		</AbsoluteFill>
 	);
